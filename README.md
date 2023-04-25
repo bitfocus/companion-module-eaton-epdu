@@ -1,1 +1,2 @@
-# companion-module-eaton-epdu
+# companion-module-audiotechnica-digitalmixer
+See HELP.md and LICENSE
