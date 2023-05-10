@@ -110,6 +110,8 @@ class moduleInstance extends InstanceBase {
 			else {
 				self.connectionReady = false;
 				self.updateStatus(InstanceStatus.Error, 'Invalid prompt received from ePDU')
+				self.log('deubg', 'Invalid prompt received from ePDU, retrying in 5 seconds');
+				setTimeout(self.init, 5000, self.config);
 			}
 		});
 		
