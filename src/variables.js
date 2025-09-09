@@ -1,4 +1,3 @@
-
 module.exports = {
 	initVariables() {
 		let variables = []
@@ -7,7 +6,7 @@ module.exports = {
 			let outlet = this.CHOICES_OUTLETS[i];
 			variables.push({variableId: `outlet_${outlet.id}_state`,  name: `Outlet ${outlet.label} State`})
 		}*/
-		
+
 		this.setVariableDefinitions(variables)
 	},
 
@@ -24,9 +23,8 @@ module.exports = {
 
 			this.setVariableValues(variableObj);
 			*/
-		}
-		catch(error) {
+		} catch (error) {
 			this.log('error', `Error checking variables: ${error.toString()}`)
 		}
-	}
+	},
 }

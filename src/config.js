@@ -8,7 +8,8 @@ module.exports = {
 				id: 'info',
 				width: 12,
 				label: 'Information',
-				value: 'This module will connect to an Eaton ePDU device over telnet and allow you to control the outlets and monitor the power usage. Telnet must be enabled on the device.',
+				value:
+					'This module will connect to an Eaton ePDU device over telnet and allow you to control the outlets and monitor the power usage. Telnet must be enabled on the device.',
 			},
 			{
 				type: 'textinput',
@@ -39,7 +40,7 @@ module.exports = {
 				min: 1,
 				max: 24,
 				default: 24,
-			}
+			},
 			/*{
 				type: 'number',
 				id: 'poll_interval',
@@ -50,5 +51,5 @@ module.exports = {
 				width: 3,
 			}*/
 		]
-	}
+	},
 }

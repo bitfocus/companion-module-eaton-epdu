@@ -25,17 +25,17 @@ class moduleInstance extends InstanceBase {
 			...variables,
 			...presets,
 			...utils,
-			...constants
+			...constants,
 		})
 
-		this.connection = undefined;
-		this.connectionReady = false;
+		this.connection = undefined
+		this.connectionReady = false
 
-		this.pollTimer = undefined;
+		this.pollTimer = undefined
 
-		this.OUTLET_STATES = [];
+		this.OUTLET_STATES = []
 
-		this.CHOICES_OUTLETS = [];
+		this.CHOICES_OUTLETS = []
 	}
 
 	async destroy() {
@@ -64,15 +64,15 @@ class moduleInstance extends InstanceBase {
 		this.config = config
 
 		//create outlet choices
-		this.CHOICES_OUTLETS = [];
+		this.CHOICES_OUTLETS = []
 		for (let i = 1; i <= this.config.outlet_count; i++) {
 			let outletObj = {
 				id: i,
-				label: `Outlet ${i}`
+				label: `Outlet ${i}`,
 			}
-			this.CHOICES_OUTLETS.push(outletObj);
+			this.CHOICES_OUTLETS.push(outletObj)
 		}
-		
+
 		this.initActions()
 		this.initFeedbacks()
 		this.initVariables()
@@ -82,10 +82,10 @@ class moduleInstance extends InstanceBase {
 	}
 
 	async initTelnet() {
-		let self = this;
+		let self = this
 
-		this.connection = new Telnet();
-		
+		this.connection = new Telnet()
+
 		const params = {
 			host: this.config.host,
 			port: 23,
@@ -95,66 +95,63 @@ class moduleInstance extends InstanceBase {
 			password: `${this.config.password}\r\n`,
 			shellPrompt: 'pdu#0>', // or negotiationMandatory: false
 			negotiationMandatory: false,
-			timeout: 1500
+			timeout: 1500,
 		}
-		
+
 		this.connection.on('data', function (data) {
-			self.processResponse(data.toString());
-		});
-		
+			self.processResponse(data.toString())
+		})
+
 		this.connection.on('ready', async function (prompt) {
 			if (prompt === 'pdu#0>') {
-				self.connectionReady = true;
+				self.connectionReady = true
 				self.updateStatus(InstanceStatus.Ok)
-			}
-			else {
-				self.connectionReady = false;
+			} else {
+				self.connectionReady = false
 				self.updateStatus(InstanceStatus.Error, 'Invalid prompt received from ePDU')
-				self.log('deubg', 'Invalid prompt received from ePDU, retrying in 5 seconds');
-				setTimeout(self.init, 5000, self.config);
+				self.log('deubg', 'Invalid prompt received from ePDU, retrying in 5 seconds')
+				setTimeout(self.init, 5000, self.config)
 			}
-		});
-		
+		})
+
 		this.connection.on('error', function (error) {
 			console.log('socket error:', error)
-		});
-		
+		})
+
 		try {
-			await this.connection.connect(params);
-		}
-		catch (error) {
-			this.log('error', `Error connecting to Eaton ePDU: ${error.toString()}`);
+			await this.connection.connect(params)
+		} catch (error) {
+			this.log('error', `Error connecting to Eaton ePDU: ${error.toString()}`)
 		}
 	}
 
 	controlOutlet(outlet, state, delay = 0) {
-		let command = 'DelayBeforeStartup';
+		let command = 'DelayBeforeStartup'
 
 		if (state == false) {
-			command = 'DelayBeforeShutdown';
+			command = 'DelayBeforeShutdown'
 		}
 
-		this.log('info', `Setting Outlet ${outlet} to ${(state ? 'On' : 'False')} with delay of ${delay} seconds`);
+		this.log('info', `Setting Outlet ${outlet} to ${state ? 'On' : 'False'} with delay of ${delay} seconds`)
 
-		this.sendCommand(`set PDU.OutletSystem.Outlet[${outlet}].${command} ${delay}\r\n`);
+		this.sendCommand(`set PDU.OutletSystem.Outlet[${outlet}].${command} ${delay}\r\n`)
 	}
 
 	cycleOutlet(outlet) {
-		let command = 'ToggleControl 1';
+		let command = 'ToggleControl 1'
 
-		this.log('info', `Cycling/Rebooting Outlet ${outlet}`);
+		this.log('info', `Cycling/Rebooting Outlet ${outlet}`)
 
-		this.sendCommand(`set PDU.OutletSystem.Outlet[${outlet}].${command}\r\n`);
+		this.sendCommand(`set PDU.OutletSystem.Outlet[${outlet}].${command}\r\n`)
 	}
 
 	async sendCommand(cmd) {
 		if (this.connectionReady) {
-			this.log('debug', cmd);
-			let res = await this.connection.exec(`${cmd}\r\n`);
+			this.log('debug', cmd)
+			let res = await this.connection.exec(`${cmd}\r\n`)
+		} else {
+			this.log('warning', 'Connection not ready, unable to send command at this time.')
 		}
-		else {
-			this.log('warning', 'Connection not ready, unable to send command at this time.');
-		}		
 	}
 
 	processResponse(response) {

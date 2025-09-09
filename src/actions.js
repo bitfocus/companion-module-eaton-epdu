@@ -12,7 +12,7 @@ module.exports = {
 					label: 'Outlet',
 					id: 'outlet',
 					default: this.CHOICES_OUTLETS[0].id,
-					choices: this.CHOICES_OUTLETS
+					choices: this.CHOICES_OUTLETS,
 				},
 				{
 					type: 'number',
@@ -22,11 +22,11 @@ module.exports = {
 					min: 0,
 					max: 60,
 					required: true,
-				}
+				},
 			],
 			callback: async (event) => {
-				this.controlOutlet(event.options.outlet, true, event.options.delay);
-			}
+				this.controlOutlet(event.options.outlet, true, event.options.delay)
+			},
 		}
 
 		actions.outletOff = {
@@ -37,7 +37,7 @@ module.exports = {
 					label: 'Outlet',
 					id: 'outlet',
 					default: this.CHOICES_OUTLETS[0].id,
-					choices: this.CHOICES_OUTLETS
+					choices: this.CHOICES_OUTLETS,
 				},
 				{
 					type: 'number',
@@ -47,11 +47,11 @@ module.exports = {
 					min: 0,
 					max: 60,
 					required: true,
-				}
+				},
 			],
 			callback: async (event) => {
-				this.controlOutlet(event.options.outlet, false, event.options.delay);
-			}
+				this.controlOutlet(event.options.outlet, false, event.options.delay)
+			},
 		}
 
 		actions.outletCycle = {
@@ -62,12 +62,12 @@ module.exports = {
 					label: 'Outlet',
 					id: 'outlet',
 					default: this.CHOICES_OUTLETS[0].id,
-					choices: this.CHOICES_OUTLETS
-				}
+					choices: this.CHOICES_OUTLETS,
+				},
 			],
 			callback: async (event) => {
-				this.cycleOutlet(event.options.outlet);
-			}
+				this.cycleOutlet(event.options.outlet)
+			},
 		}
 
 		actions.outletOnAll = {
@@ -81,14 +81,14 @@ module.exports = {
 					min: 0,
 					max: 60,
 					required: true,
-				}
+				},
 			],
 			callback: async (event) => {
 				for (let i = 0; i < this.CHOICES_OUTLETS.length; i++) {
-					let outlet = (i+1);
-					this.controlOutlet(outlet, true);
+					let outlet = i + 1
+					this.controlOutlet(outlet, true)
 				}
-			}
+			},
 		}
 
 		actions.outletOffAll = {
@@ -102,16 +102,16 @@ module.exports = {
 					min: 0,
 					max: 60,
 					required: true,
-				}
+				},
 			],
 			callback: async (event) => {
 				for (let i = 0; i < this.CHOICES_OUTLETS.length; i++) {
-					let outlet = (i+1);
-					this.controlOutlet(outlet, false, event.options.delay);
+					let outlet = i + 1
+					this.controlOutlet(outlet, false, event.options.delay)
 				}
-			}
+			},
 		}
-			
+
 		this.setActionDefinitions(actions)
-	}
+	},
 }
